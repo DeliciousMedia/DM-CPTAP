@@ -1,0 +1,11 @@
+{
+  "name": "deliciousmedia/dm-cptap",
+  "description": "DM Custom Post Type Archive Page",
+  "keywords": [],
+  "homepage": "https://github.com/DeliciousMedia/DM-CPTAP",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "php": ">=7.0",
+    "composer/installers": "v1.0.6"
+  }
+}
