@@ -6,7 +6,7 @@
  * Author:  Delicious Media Limited
  * Author URI: https://www.deliciousmedia.co.uk/
  * License: GPLv3 or later
- * Version: 1.0
+ * Version: 1.0.1
  *
  * @package dmcptap
  */
@@ -29,13 +29,13 @@ function dmcptap_content_edit_page() {
 		// translators: This is the name of the custom post type.
 		echo esc_html( sprintf( __( '%s Archive Page Content', 'dmcptap' ), $post_type->label ) );
 		?>
-		</h2> 
+		</h2>
 		<?php
 		if ( isset( $_GET['updated'] ) && 'true' === $_GET['updated'] ) {
 			echo '<div class="updated"><p>' . esc_html( 'Archive page content updated.', 'dmcptap' ) . '</p></div>';
 		}
 		?>
- 
+
 		<form method="post" action="<?php admin_url( 'edit.php?post_type=' . $post_type->name . '&page=dmcptap-' . $post_type->name . '-content' ); ?>">
 			<?php wp_nonce_field( 'dmcptap_content_edit_page' ); ?>
 			<table class="form-table">
@@ -43,19 +43,19 @@ function dmcptap_content_edit_page() {
 					<th><label for="title"><?php esc_html_e( 'Title', 'dmcptap' ); ?>:</label></th>
 					<td><input type="text" name="data[title]" id="title" class="regular-text" value="<?php echo esc_html( dmcptap_get_content_item( $post_type->name, 'title' ) ); ?>"></td>
 				</tr>
- 
+
 				<tr>
 					<th><label for="content"><?php esc_html_e( 'Content', 'dmcptap' ); ?>:</label></th>
 					<td><?php wp_editor( dmcptap_get_content_item( $post_type->name, 'content' ), 'content', [ 'textarea_name' => 'data[content]' ] ); ?></td>
 				</tr>
 			</table>
- 
+
 			<?php submit_button( __( 'Save Content', 'dmcptap' ), 'primary', 'submit', false ); ?>
- 
+
 		</form>
- 
+
 	</div><!--End .wrap-->
- 
+
 	<?php
 }
 
@@ -139,7 +139,7 @@ function dmcptap_get_supporting_cpts() {
 function dmcptap_get_content_item( $post_type, $item ) {
 	$content = get_option( 'dmcptap_' . $post_type );
 	if ( ! empty( $content[ $item ] ) ) {
-		return $content[ $item ];
+		return stripslashes( $content[ $item ] );
 	}
 	return false;
 }
