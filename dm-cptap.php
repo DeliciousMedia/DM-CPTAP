@@ -6,7 +6,7 @@
  * Author:  Delicious Media Limited
  * Author URI: https://www.deliciousmedia.co.uk/
  * License: GPLv3 or later
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * @package dmcptap
  */
@@ -19,7 +19,8 @@
 function dmcptap_content_edit_page() {
 
 	$current_screen = get_current_screen();
-	$post_type = get_post_type_object( $current_screen->post_type );
+
+	$post_type = get_post_type_object( '' === $current_screen->post_type ? 'post' : $current_screen->post_type );
 
 	?>
 	<div class="wrap">
@@ -67,7 +68,7 @@ function dmcptap_content_edit_page() {
 function dmcptap_update_options() {
 
 	$current_screen = get_current_screen();
-	$post_type = get_post_type_object( $current_screen->post_type );
+	$post_type = get_post_type_object( ( '' === $current_screen->post_type ) ? 'post' : $current_screen->post_type );
 
 	if ( ! isset( $_POST['submit'] ) ) {
 		return;
@@ -95,10 +96,17 @@ function dmcptap_update_options() {
 			update_option( 'dmcptap_' . $post_type->name, $content );
 		}
 	}
-
-	wp_safe_redirect( admin_url( 'edit.php?post_type=' . $post_type->name . '&page=dmcptap-' . $post_type->name . '-content&updated=true' ) );
+	$url_part = ( 'post' === $post_type->name ) ? 'edit.php' : 'edit.php?post_type=' . $post_type->name;
+	wp_safe_redirect(
+		add_query_arg(
+			[
+				'page' => 'dmcptap-' . $post_type->name . '-content',
+				'updated' => 'true',
+			],
+			admin_url( $url_part )
+		)
+	);
 	exit;
-
 }
 
 /**
@@ -111,7 +119,8 @@ function dmcptap_add_submenus() {
 	$cpts = dmcptap_get_supporting_cpts();
 
 	foreach ( $cpts as $cpt ) {
-		$page = add_submenu_page( 'edit.php?post_type=' . $cpt, __( 'Archive Page', 'dmcptap' ), __( 'Archive Page', 'dmcptap' ), 'edit_posts', 'dmcptap-' . $cpt . '-content', 'dmcptap_content_edit_page' );
+		$url_part = ( 'post' === $cpt ) ? 'edit.php' : 'edit.php?post_type=' . $cpt;
+		$page = add_submenu_page( $url_part, __( 'Archive Page', 'dmcptap' ), __( 'Archive Page', 'dmcptap' ), 'edit_posts', 'dmcptap-' . $cpt . '-content', 'dmcptap_content_edit_page' );
 		add_action( 'load-' . $page, 'dmcptap_update_options' );
 	}
 
@@ -143,3 +152,4 @@ function dmcptap_get_content_item( $post_type, $item ) {
 	}
 	return false;
 }
+
