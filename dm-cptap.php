@@ -6,7 +6,7 @@
  * Author:  Delicious Media Limited
  * Author URI: https://www.deliciousmedia.co.uk/
  * License: GPLv3 or later
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * @package dmcptap
  */
@@ -120,7 +120,7 @@ function dmcptap_add_submenus() {
 
 	foreach ( $cpts as $cpt ) {
 		$url_part = ( 'post' === $cpt ) ? 'edit.php' : 'edit.php?post_type=' . $cpt;
-		$page = add_submenu_page( $url_part, __( 'Archive Page', 'dmcptap' ), __( 'Archive Page', 'dmcptap' ), 'edit_posts', 'dmcptap-' . $cpt . '-content', 'dmcptap_content_edit_page' );
+		$page = add_submenu_page( $url_part, __( 'Archive Page', 'dmcptap' ), __( 'Archive Page', 'dmcptap' ), 'publish_pages', 'dmcptap-' . $cpt . '-content', 'dmcptap_content_edit_page' );
 		add_action( 'load-' . $page, 'dmcptap_update_options' );
 	}
 
